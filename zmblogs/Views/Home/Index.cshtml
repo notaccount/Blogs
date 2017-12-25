@@ -1,0 +1,96 @@
+﻿@model IEnumerable<Power.Models.Blogs>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Pages/_Layout.cshtml";
+    Power.Models.PowerUser userinfo = ViewBag.UserInfo;
+    List<Power.Models.Tags> TagList = ViewBag.TagList;
+}
+<style type="text/css">
+    .spanPageView {
+        display: block;
+        width: 48px;
+        height: 53px;
+        text-align: center;
+        float: left;
+        background: url(/images/blogsIndex/upup.gif);
+        color: #337ab7;
+        line-height: 30px;
+    }
+
+    .clear {
+        clear: both;
+    }
+
+    .taghref {
+        display: block;
+        float: left;
+        margin: 10px;
+    }
+
+    .tagOne {
+        font-size: 16px;
+    }
+
+    .tagTwo {
+        font-size: 18px;
+    }
+
+    .tagThree {
+        font-size: 20px;
+    }
+
+    h3 {
+        font-size: 20px;
+    }
+</style>
+
+
+
+<div class="container">
+    <div class="row clearfix">
+        <div class="col-md-3 column">
+            @*<div class="taghref"><a class="label label-default">SqlServer(12)</a></div>
+                <div class="taghref"><a class="label label-default">Oracle(5)</a></div>
+                <div class="taghref"><a class="label label-default">.NetCore(11)</a></div>
+                <div class="taghref"><a class="label label-default">Asp.Net</a></div>
+                <div class="taghref"><a class="label label-default">RDLC</a></div>
+                <div class="taghref"><a class="label label-default">tag1tag1</a></div>
+                <div class="taghref"><a class="label label-default">tag1tag1</a></div>
+                <div class="taghref"><a class="label label-default">tag1tag1</a></div>
+                <div class="taghref"><a class="label label-default">tag1tag1</a></div>*@
+
+            @foreach (var item in TagList)
+            {
+                string tagclass = "tagOne";
+                if (item.BlogNum > 0 && item.BlogNum < 4)
+                {
+                    tagclass = "tagTwo";
+                }
+                else if (item.BlogNum >= 4)
+                {
+                    tagclass = "tagThree";
+                }
+                <div class="taghref @tagclass"><a class="label label-default" href="/Home/Tag?tag=@item.Name">@item.Name (@item.BlogNum)</a></div>
+            }
+
+            <div class="clear"></div>
+        </div>
+        <div class="col-md-9 column">
+            @foreach (var item in Model)
+            {
+
+                <h3>
+                    <a href="/Blogs/Details?id=@item.Id">@Html.DisplayFor(modelItem => item.Title)</a>
+                </h3>
+                <p>
+                    @item.ShortContent
+                </p>
+                <p>
+                    @item.PowerUser.Cn 发布于 @item.U_CreateDate  阅读(@item.PageView)
+                </p>
+
+            }
+        </div>
+    </div>
+</div>

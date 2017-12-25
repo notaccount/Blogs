@@ -1,0 +1,76 @@
+﻿@model Power.Models.Blogs
+
+@{
+    ViewBag.Title = "编辑";
+    Layout = "~/Pages/_Layout.cshtml";
+    Power.Models.Blogs entity = ViewBag.Entity;
+    List<Power.Models.BlogTag> checkedTagList = ViewBag.CheckedTag;
+    List<Power.Models.Tags> TagList = ViewBag.TagList;
+}
+
+<script src="~/js/jquery-1.10.2.min.js"></script>
+<script src="~/ckeditor/ckeditor.js"></script>
+
+<br/>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Id)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.MainContent, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <textarea id="MainContent" name="MainContent" style="width:85%">@entity.MainContent </textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-2" for="MainContent">标签</label>
+            <div id="TagDiv" class="col-md-10">
+                @foreach (var item in TagList)
+                {
+
+                    <div class="checkbox cbxTags">
+
+                        @if (checkedTagList.Where(x => x.TagId == item.Id).Count()>0)
+                        {
+                            <label><input id="@item.Id" type="checkbox" checked="checked" onchange="SumCheckBox()" />@item.Name</label>
+                        }else{
+                            <label><input id="@item.Id" type="checkbox" onchange="SumCheckBox()" />@item.Name</label>
+                        }
+                    </div>
+                }
+                <div class="clear"></div>
+                <input type="hidden" value="" id="checkedTag" name="checkedtag" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+<script type="text/javascript">
+
+    var editor = CKEDITOR.replace('MainContent');
+
+</script>

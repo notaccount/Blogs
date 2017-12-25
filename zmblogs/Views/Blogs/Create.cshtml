@@ -1,0 +1,165 @@
+﻿@model Power.Models.Blogs
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Pages/_Layout.cshtml";
+
+    List<Power.Models.Tags> TagList = ViewBag.TagList;
+}
+
+<script src="~/js/jquery-1.10.2.min.js"></script>
+<script src="/ckeditor/ckeditor.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+
+<script src="~/js/jquery.form.js"></script>
+<style type="text/css">
+    .cbxTags {
+        float: left;
+        margin-right: 30px;
+    }
+</style>
+
+<script type="text/javascript">
+    $(function () {
+        $("#cbxIsOpen").change(function () {
+            if ($(this).prop('checked')) {
+                $("#IsOpen").val("True");
+            } else {
+                $("#IsOpen").val("False");
+            }
+        })
+    })
+
+    function SumCheckBox() {
+        var tags = "";
+        $("#TagDiv").find("input[type='checkbox']").each(function (i, d) {
+            if ($(d).prop('checked')) {
+                tags += d.id + ",";
+            }
+        })
+        $("#checkedTag").val(tags);
+    }
+
+    function validateForm() {
+        var title = $("#tbxtitle").val();
+        var MainContent = $("#MainContent").val();
+        if (title == "" ) {
+            showPopover();
+            return false;
+        }
+    }
+
+    function showPopover() {
+        $("#showMessage").show();
+        //2秒后消失提示框
+        var id = setTimeout(
+            function () {
+                $("#showMessage").hide();
+            }, 5000
+        );
+    }
+
+    function btnAjaxSubmit() {
+
+        $("#fileForm").ajaxSubmit({
+            url: "/Blogs/UpFile",
+            success: function (data) {
+                $("#ImageList").append("<li>" + data + "</li>");
+            },
+            error: function (data) {
+                alert(data);
+            },
+            //resetForm: true,
+            type: 'post',
+            dataType: 'text'
+        });
+    }
+</script>
+
+
+<div>
+    <form id="fileForm" method="post" enctype="multipart/form-data">
+        @*<input id="file-zh" name="file-zh[]" type="file" class="file" multiple>*@
+        <input type="file" name="txt_file" />
+        <input type="button" value="上传" onclick="btnAjaxSubmit()" />
+    </form>
+    <div>
+        <ul id="ImageList">
+            <li></li>
+        </ul>
+    </div>
+</div>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    <input type="hidden" id="Id" name="Id" value="@ViewBag.Id"/>
+    <div class="form-horizontal">
+        <div id="showMessage" style="display:none;" class="alert alert-success alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <h4>
+                注意!
+            </h4> <strong>Warning!</strong> 标题与内容不可以为空！
+        </div>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Title, new { htmlAttributes = new { id = "tbxtitle", @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.MainContent, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <textarea id="MainContent" name="MainContent" style="width:85%"></textarea>
+
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-2" for="">图片资源</label>
+            <div class="col-md-10">
+                <form id="fileForm" method="post" enctype="multipart/form-data">
+                    <input type="file" name="txt_file" />
+                    <input type="button" value="上传" onclick="btnAjaxSubmit()" />
+                </form>
+                
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.IsOpen, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <input type="hidden" id="IsOpen" name="IsOpen" value="Tree" />
+                <input id="cbxIsOpen" type="checkbox" checked="checked" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-2" for="MainContent">标签</label>
+            <div id="TagDiv" class="col-md-10">
+                @foreach (var item in TagList)
+                {
+                    <div class="checkbox cbxTags">
+                        <label><input id="@item.Id" type="checkbox" onchange="SumCheckBox()" />@item.Name</label>
+                    </div>
+                }
+                <div class="clear"></div>
+                <input type="hidden" value="" id="checkedTag" name="checkedtag" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" onclick="return validateForm()" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+<script type="text/javascript">
+    var editor = CKEDITOR.replace('MainContent');
+</script>

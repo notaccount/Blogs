@@ -1,0 +1,18 @@
+﻿
+@{
+    IList<Power.Models.Comment> list = ViewBag.list;
+
+}
+<div id="divComment">
+    @{
+        foreach (Power.Models.Comment item in list)
+        {
+            <div>
+                <p>@item.SortNo 楼 &nbsp;&nbsp; @item.Creator</p>
+                <p>@item.MainContent</p>
+                <hr />
+            </div>
+
+        }
+    }
+</div>

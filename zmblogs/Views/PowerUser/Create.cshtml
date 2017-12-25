@@ -1,0 +1,55 @@
+﻿@model Power.Models.PowerUser
+@{ 
+    Layout = "~/Pages/_Layout.cshtml";
+}
+<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+
+<script type="text/javascript">
+    $(function () {
+        // 在键盘按下并释放及提交后验证提交表单
+        $("#regForm").validate({
+            rules: {
+                UID: "required",
+                Cn:"required",
+                PassWord: "required"
+            },
+            messages: {
+                UID: "请输入账号",
+                Cn:"请输入名称",
+                PassWord: "请输入密码"
+            }
+        })
+    });
+</script>
+
+<br/>
+<div class="row">
+    <div class="col-md-4">
+        <form id="regForm" action="Create" method="post">
+            @Html.ValidationSummary(true)
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="UID" class="control-label">账号</label>
+                <input asp-for="UID" class="form-control" name="UID"  value="@Model.UID" />
+                <span asp-validation-for="UID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Cn" class="control-label">姓名</label>
+                <input asp-for="Cn" class="form-control" name="Cn" value="@Model.Cn" />
+                <span asp-validation-for="Cn" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PassWord" class="control-label">密码</label>
+                <input asp-for="PassWord" class="form-control" type="password" id="pw1" name="PassWord" value="@Model.PassWord" />
+                <span asp-validation-for="PassWord" class="text-danger"></span>
+            </div>
+    
+            <div class="form-group">
+                <input type="submit" value="注册"  class="btn btn-default" />
+                <span>@ViewData["message"]</span>
+            </div>
+        </form>
+    </div>
+</div>
+

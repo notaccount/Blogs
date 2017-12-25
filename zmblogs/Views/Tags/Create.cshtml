@@ -1,0 +1,54 @@
+﻿@model Power.Models.Tags
+@{ 
+    Layout = "~/Pages/_Layout.cshtml";
+}
+
+<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+
+<script type="text/javascript">
+    $(function () {
+        // 在键盘按下并释放及提交后验证提交表单
+        $("#tagForm").validate({
+            rules: {
+                Name: "required"     
+            },
+            messages: {
+                Name: "请输入标签名字"
+            }
+        })
+    });
+</script>
+
+<br/>
+<div class="row">
+    <div class="col-md-4">
+        <form id="tagForm" action="/Tags/Create" method="post">
+            @Html.ValidationSummary(true)
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label">Tag名称</label>
+                <input asp-for="Name" name="Name" class="form-control" data-val-required="The ReleaseDate field is required." />
+                @*<span asp-validation-for="Name" class="text-danger"></span>*@
+                <span class="text-danger field-validation-valid"
+                      data-valmsg-for="Name" data-valmsg-replace="true"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Remark" class="control-label">备注/说明</label>
+                <input asp-for="Remark" name="Remark" class="form-control" />
+                <span asp-validation-for="Remark" class="text-danger"></span>
+            </div>
+      
+   
+       
+            <div class="form-group">
+                <input type="submit" id="btnSubmit" value="Create" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

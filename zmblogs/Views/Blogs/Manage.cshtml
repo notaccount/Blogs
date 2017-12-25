@@ -1,0 +1,58 @@
+﻿@{ 
+    Layout = "~/Pages/_Layout.cshtml";
+}
+
+@model IEnumerable<Power.Models.Blogs>
+<br/>
+<table class="table">
+    <thead>
+        <tr>
+            <th >
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsOpen)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PageView)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReCommend)
+            </th>
+           
+            <th>
+                @Html.DisplayNameFor(model => model.U_CreateDate)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsOpen)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PageView)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ReCommend)
+                </td>
+                
+                <td>
+                    @Html.DisplayFor(modelItem => item.U_CreateDate)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit","Blogs", new {  id=item.Id  }) |
+                    @Html.ActionLink("Details", "Details", "Blogs", new {  id=item.Id  }) |
+                    @Html.ActionLink("Delete", "Delete", "Blogs", new {  id=item.Id  })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

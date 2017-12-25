@@ -1,0 +1,72 @@
+﻿@model Power.Models.Blogs
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Pages/_Layout.cshtml";
+    Power.Models.Blogs entity = ViewBag.Entity;
+}
+
+@using CommonPower.WebApp.ViewComponents
+
+<script type="text/javascript">
+    $(function () {
+        $("#btnSubmitComment").click(function () {
+            var comment = $("#mainComment").val();
+            var blogId = '@entity.Id.ToString()';
+            $.post("/Comment/Create", { comment: comment, blogId: blogId }, function (r) {
+                r = JSON.parse(r);
+                var html = " <div>" +
+                        "<p>"+r.SortNo+" 楼 &nbsp;&nbsp; "+r.Creator+"</p>"+
+                        "<p>" + r.MainContent+"</p>"+
+                        "<hr />"+
+                    "</div>";
+                $("#divComment").prepend(html);
+                $("#mainComment").val("");
+            })
+
+        })
+
+    })
+</script>
+
+<div>
+
+    <hr />
+    <div class="dl-horizontal">
+
+
+        <h2>@entity.Title</h2>
+
+        @Html.Raw(@entity.MainContent)
+
+    </div>
+</div>
+<br />
+<hr />
+<br />
+
+@*加载评论*@
+@(await Component.InvokeAsync<BlogsComment>(new { id = entity.Id.ToString() }))
+
+<br />
+
+@{
+    if (User.Identity.IsAuthenticated)
+    {
+        <p>发表评论</p>
+        <p>账号：@User.Identity.Name</p>
+        <p>
+            <textarea id="mainComment" style="width:100%; height:100px;" ></textarea>
+        </p>
+        <p>
+            <input type="button" id="btnSubmitComment" value="提交" />
+        </p>
+    }
+}
+
+
+
+<p>
+
+    @Html.ActionLink("Back to List", "Index","Home")
+</p>

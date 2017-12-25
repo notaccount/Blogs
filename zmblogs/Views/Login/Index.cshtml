@@ -1,0 +1,48 @@
+﻿@model Power.Models.PowerUser
+@{ 
+    ViewData["Title"] = "用户登录 - 记忆代码";
+    Layout = "~/Pages/_Layout.cshtml";
+}
+
+<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+
+<script type="text/javascript">
+    $(function () {
+        // 在键盘按下并释放及提交后验证提交表单
+        $("#LoginForm").validate({
+            rules: {
+                UID: "required",
+                PassWord:"required"
+            },
+            messages: {
+                UID: "请输入账号",
+                PassWord: "请输入密码"
+            }
+        })
+    });
+</script>
+
+
+
+<br/>
+<div class="row">
+    <div class="col-md-4">
+        <form id="LoginForm" action="/Login/LoginValidate" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="UID" class="control-label">账号</label>
+                <input asp-for="UID" class="form-control" name="UID" />
+                <span asp-validation-for="UID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PassWord" class="control-label">密码</label>
+                <input asp-for="PassWord" class="form-control" type="password" name="PassWord" />
+                <span asp-validation-for="PassWord" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="登录" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
