@@ -1,5 +1,6 @@
 ﻿@model Power.Models.Tags
 @{ 
+    ViewBag.Title = "新建标签";
     Layout = "~/Pages/_Layout.cshtml";
 }
 
@@ -29,7 +30,6 @@
             <div class="form-group">
                 <label asp-for="Name" class="control-label">Tag名称</label>
                 <input asp-for="Name" name="Name" class="form-control" data-val-required="The ReleaseDate field is required." />
-                @*<span asp-validation-for="Name" class="text-danger"></span>*@
                 <span class="text-danger field-validation-valid"
                       data-valmsg-for="Name" data-valmsg-replace="true"></span>
             </div>

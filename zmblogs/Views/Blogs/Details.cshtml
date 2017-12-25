@@ -1,9 +1,10 @@
 ﻿@model Power.Models.Blogs
 
 @{
-    ViewBag.Title = "Details";
+
     Layout = "~/Pages/_Layout.cshtml";
     Power.Models.Blogs entity = ViewBag.Entity;
+    ViewBag.Title = entity.Title;
 }
 
 @using CommonPower.WebApp.ViewComponents

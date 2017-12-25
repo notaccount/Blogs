@@ -1,5 +1,6 @@
 ﻿@model IEnumerable<Power.Models.Tags>
 @{
+    ViewBag.Title = "标签列表";
     Layout = "~/Pages/_Layout.cshtml";
 }
 <p>
@@ -45,7 +46,7 @@
                 @Html.DisplayFor(modelItem => item.U_CreateDate)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Edit", "Edit", new {  id=item.Id  }) |
             </td>
         </tr>
 }

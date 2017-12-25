@@ -1,7 +1,7 @@
 ﻿@model Power.Models.Blogs
 
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "写博客";
     Layout = "~/Pages/_Layout.cshtml";
 
     List<Power.Models.Tags> TagList = ViewBag.TagList;
@@ -117,16 +117,6 @@
             <div class="col-md-10">
                 <textarea id="MainContent" name="MainContent" style="width:85%"></textarea>
 
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label col-md-2" for="">图片资源</label>
-            <div class="col-md-10">
-                <form id="fileForm" method="post" enctype="multipart/form-data">
-                    <input type="file" name="txt_file" />
-                    <input type="button" value="上传" onclick="btnAjaxSubmit()" />
-                </form>
-                
             </div>
         </div>
         <div class="form-group">

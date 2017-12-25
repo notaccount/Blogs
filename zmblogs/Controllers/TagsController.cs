@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Power.Repository;
 using Power.Models;
 using Newtonsoft.Json;
+using Microsoft.EntityFrameworkCore;
 
 namespace CommonPower.WebApp.Controllers
 {
@@ -47,8 +48,6 @@ namespace CommonPower.WebApp.Controllers
                 {
                     return View(tag);
                 }
-
-
                 PowerUser puser = Helper.CurrentUser(User.Claims.FirstOrDefault().Issuer, _db);
                 Guid id = Guid.NewGuid();
                 tag.Id = id;
@@ -67,21 +66,39 @@ namespace CommonPower.WebApp.Controllers
         }
 
         // GET: PowerUser/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult Edit(string id)
         {
-            return View();
+            Tags tag = new Tags();
+            if (!string.IsNullOrEmpty(id))
+            {
+                Guid gid = Guid.Parse(id);
+                tag = _db.Tags.Find(gid);
+            }
+            return View(tag);
         }
 
         // POST: PowerUser/Edit/5
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(string id, IFormCollection collection)
         {
             try
             {
-                // TODO: Add update logic here
+                if (!string.IsNullOrEmpty(id))
+                {
+                    string name = collection["Name"];
+                    string remark = collection["Remark"];
 
-                return RedirectToAction(nameof(Index));
+                    Guid gid = Guid.Parse(id);
+                    Tags tag = _db.Tags.Find(gid);
+                    tag.Name = name;
+                    tag.Remark = remark;
+
+                    _db.Entry(tag).State = EntityState.Modified;
+                    _db.SaveChanges();
+
+                    return RedirectToAction("Index");
+                }
+                return View();
             }
             catch
             {

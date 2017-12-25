@@ -189,7 +189,7 @@ namespace CommonPower.WebApp
                 _context.Tags.UpdateRange(list);
 
                 _context.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index","Home");
             }
             catch
             {
@@ -220,14 +220,18 @@ namespace CommonPower.WebApp
                 var title = collection["Title"];
                 var content = collection["MainContent"];
 
-                var bb = new Blogs() { Id = Guid.Parse(id), Title = title, MainContent = content };
-                _context.Entry(bb).State = EntityState.Modified;
+                Blogs a = _context.Blogs.Find(Guid.Parse(id));
+                a.Title = title;
+                a.MainContent = content;
+
+                //var bb = new Blogs() { Id = Guid.Parse(id), Title = title, MainContent = content };
+                _context.Entry(a).State = EntityState.Modified;
                 _context.SaveChanges();
 
 
-                return RedirectToAction("Index");
+                return RedirectToAction("Index","Home");
             }
-            catch
+            catch(Exception ex)
             {
                 return View();
             }
