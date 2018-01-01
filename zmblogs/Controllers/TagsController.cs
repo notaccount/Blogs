@@ -23,8 +23,18 @@ namespace CommonPower.WebApp.Controllers
         // GET: PowerUser
         public ActionResult Index()
         {
-            var list = _db.Tags.ToList();
-            return View(list);
+            string userId = User.Claims.FirstOrDefault().Issuer;
+           PowerUser model =  _db.PowerUser.Where(x => x.Id == Guid.Parse(userId)).FirstOrDefault();
+            if (model.IsSuperAdmin == true)
+            {
+                var list = _db.Tags.ToList();
+                return View(list);
+            }
+            else {
+                var list = _db.Tags.Where(x => x.CreatorId == Guid.Parse(userId)).ToList();
+                return View(list);
+            }
+            
         }
 
         // GET: PowerUser/Create
@@ -107,16 +117,11 @@ namespace CommonPower.WebApp.Controllers
         }
 
 
-        // GET: Tags/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
+
 
         // POST: Tags/Delete/5
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult Delete(string id)
         {
             try
             {

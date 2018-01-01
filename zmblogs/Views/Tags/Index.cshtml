@@ -3,9 +3,24 @@
     ViewBag.Title = "标签列表";
     Layout = "~/Pages/_Layout.cshtml";
 }
+
+<script type="text/javascript">
+    function deleteFun(id) {
+        if (confirm("确定删除吗？")) { 
+
+
+        }
+    }
+</script>
+
+
+
+
+
 <p>
     <a href="/Tags/Create">Create New</a>
 </p>
+@Html.AntiForgeryToken()
 <table class="table">
     <thead>
         <tr>
@@ -46,7 +61,8 @@
                 @Html.DisplayFor(modelItem => item.U_CreateDate)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new {  id=item.Id  }) |
+                @Html.ActionLink("编辑", "Edit", new {  id=item.Id  }) | <a href="javascript:deleteFun('@item.Id')" >删除</a>
+                
             </td>
         </tr>
 }

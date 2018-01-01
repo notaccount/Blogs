@@ -29,5 +29,8 @@ namespace Power.Models
         [StringLength(50)]
         public string PassWord { get; set; }
 
+        [DisplayName("超级管理员")]
+        public bool IsSuperAdmin { get; set; }
+
     }
 }

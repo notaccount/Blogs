@@ -92,6 +92,20 @@ namespace CommonPower.WebApp.Controllers
             }
         }
 
+        public bool ValidateIsOnly(string Uid)
+        {
+            if (!string.IsNullOrEmpty(Uid))
+            {
+                if (_db.PowerUser.Where(x => x.UID == Uid.Trim()).Count() > 0)
+                {
+                    return false;
+                }
+                return true;
+            }
+            return false;
+        }
+
+
 
         private void SaveAuthen(PowerUser model)
         {
