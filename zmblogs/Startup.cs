@@ -36,7 +36,7 @@ namespace CommonPower.WebApp
 
             if (ProviderName == "SqlServer")
             {
-                services.AddDbContext<DataContext>(options => options.UseSqlServer(ConnectionString));
+                services.AddDbContext<DataContext>(options => options.UseSqlServer(ConnectionString, b => b.UseRowNumberForPaging()));
             }
             else if (ProviderName == "SqlLite")
             {

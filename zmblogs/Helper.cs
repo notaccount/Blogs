@@ -8,6 +8,7 @@ using Power.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Web;
 
 namespace CommonPower.WebApp
@@ -34,5 +35,64 @@ namespace CommonPower.WebApp
 
             return strText;
         }
+
+        public static string Pager(int PageIndex,int PageSize,int DataCount,bool IsFirstPage,string path)
+        {
+            int PageCount = (DataCount + PageSize - 1) / PageSize;
+            path = string.Join("/",path.Split("/").Take(3).ToArray());
+            StringBuilder sb = new StringBuilder();
+
+
+            string prevUrl = "";
+            string nextUrl = "";
+
+            if (IsFirstPage)
+            {
+                if (PageIndex == 1)
+                    prevUrl = "javascript:void(0)";
+                else if (PageIndex == 2)
+                    prevUrl = "/";
+                else
+                    prevUrl = "/Home/Index/" + (PageIndex - 1);
+                nextUrl = PageIndex == PageCount ? "javascript:void(0)" : "/Home/Index/" + (PageIndex + 1);
+            }
+            else {
+                if (PageIndex == 1)
+                    prevUrl = "javascript:void(0)";
+                else if (PageIndex == 2)
+                    prevUrl = path;
+                else
+                    prevUrl = path + "/" + (PageIndex - 1);
+                nextUrl = PageIndex == PageCount ? "javascript:void(0)" : path + "/" + (PageIndex + 1);
+            }
+
+            sb.AppendFormat("<li><a href='{0}'>Prev</a></li>",prevUrl);
+
+            sb.AppendFormat("<li><a href='{0}'>Next</a></li>",nextUrl);
+            // <li>
+            //    <a href="#">Prev</a>
+            //</li>
+            //<li>
+            //    <a href="#">1</a>
+            //</li>
+            //<li>
+            //    <a href="#">2</a>
+            //</li>
+            //<li>
+            //    <a href="#">3</a>
+            //</li>
+            //<li>
+            //    <a href="#">4</a>
+            //</li>
+            //<li>
+            //    <a href="#">5</a>
+            //</li>
+            //<li>
+            //    <a href="#">Next</a>
+            //</li>
+
+            return sb.ToString();
+        }
+
     }
 }

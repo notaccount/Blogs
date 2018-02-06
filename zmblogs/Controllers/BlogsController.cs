@@ -237,10 +237,13 @@ namespace CommonPower.WebApp
             }
         }
 
-        public IActionResult Manage()
+        public IActionResult Manage(int id=1)
         {
+            int PageIndex = id;
+            int PageSize = 20;
             string userId = User.Claims.FirstOrDefault().Issuer;
-            IList<Blogs> list = _context.Blogs.Where(x => x.PowerUserId.ToString() == userId).ToList();
+            IList<Blogs> list = _context.Blogs.Where(x => x.PowerUserId.ToString() == userId).OrderByDescending(x=>x.U_CreateDate).Skip((PageIndex - 1) * PageSize).Take(PageSize).ToList();
+            ViewBag.Pager = Helper.Pager(PageIndex, PageSize, _context.Blogs.Where(x => x.PowerUserId.ToString() == userId).Count(), false,Request.Path);
             return View(list);
         }
 

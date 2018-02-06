@@ -19,33 +19,36 @@ namespace CommonPower.WebApp.Controllers
         }
 
         [AllowAnonymous]
-        public IActionResult Index()
+        public IActionResult Index(int id = 1)
         {
-            string id = User.Claims.FirstOrDefault() == null ? "" : User.Claims.FirstOrDefault().Issuer;
-            PowerUser model = Helper.CurrentUser(id, _context);
-            List<Blogs> list = (from c in _context.Blogs
-                                join t in _context.BlogTag
-                                on new { id = c.Id } equals new { id = t.BlogId }
-                                into temp
-                                from bb in temp.DefaultIfEmpty()
-                                join p in _context.PowerUser
-                                on new { id = c.PowerUserId } equals new { id = p.Id }
-                                where c.IsOpen == true
-                                orderby c.U_CreateDate descending
-                                select new Blogs
-                                {
-                                    Id = c.Id,
-                                    IsDelete = c.IsDelete,
-                                    IsOpen = c.IsOpen,
-                                    MainContent = c.MainContent,
-                                    Title = c.Title,
-                                    PageView = c.PageView,
-                                    PowerUserId = c.PowerUserId,
-                                    PowerUser = p,
-                                    ReCommend = c.ReCommend,
-                                    ShortContent = c.ShortContent,
-                                    U_CreateDate = c.U_CreateDate
-                                }).ToList();
+            int PageIndex = id;
+            int PageSize = 15;
+            string UserId = User.Claims.FirstOrDefault() == null ? "" : User.Claims.FirstOrDefault().Issuer;
+            PowerUser model = Helper.CurrentUser(UserId, _context);
+
+            var query = 
+                         from c in _context.Blogs
+                         join p in (from m in _context.PowerUser select new PowerUser { Cn = m.Cn,Id = m.Id,IsSuperAdmin = m.IsSuperAdmin,UID = m.UID})
+                         on c.PowerUserId equals p.Id
+                         where c.IsOpen == true
+                         orderby c.U_CreateDate descending
+                         select new Blogs
+                         {
+                             Id = c.Id,
+                             IsDelete = c.IsDelete,
+                             IsOpen = c.IsOpen,
+                             MainContent = c.MainContent,
+                             Title = c.Title,
+                             PageView = c.PageView,
+                             PowerUserId = c.PowerUserId,
+                             PowerUser = p,
+                             ReCommend = c.ReCommend,
+                             ShortContent = c.ShortContent,
+                             U_CreateDate = c.U_CreateDate
+                         };
+            IList<Blogs> list = query.Skip((PageIndex - 1) * PageSize).Take(PageSize).ToList();
+            ViewBag.Pager = Helper.Pager(PageIndex, PageSize, query.Count(),true,Request.Path);
+
             ViewBag.UserInfo = model;
             ViewBag.TagList = _context.Tags.ToList();
             return View(list);
@@ -86,7 +89,7 @@ namespace CommonPower.WebApp.Controllers
 
             ViewBag.UserInfo = model;
             ViewBag.TagList = _context.Tags.ToList();
-            return View("Index",list);
+            return View("Index", list);
         }
 
 
